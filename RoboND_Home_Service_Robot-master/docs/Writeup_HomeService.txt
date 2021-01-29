@@ -1,0 +1,33 @@
+-------------------------------- 
+ Project 5: Home Service Robot
+--------------------------------
+
+List of packages used:
+------------------------
+1. turtlebot --> turtlebot ros package provides the interface to use key utilities in the project 
+                 like (i) AMCL(Adaptive Monte Carlo Localization) localizer through the launch file "amcl_demo.launch" under turtlebot_gazebo node
+                      (ii) Rviz (Ros Visualizer) through the launch file "view_navigation.launch" under turtlebot_rviz_launchers node
+                      (iii) Mapping through the launch file "gmapping_demo.launch" under the turtlebot_gazebo node
+
+2. turtlebot_teleop --> This package provides the teleoperation interface to control the robot's movement in the virtual world created by the user
+
+3. Movebase msgs--> Enables robot to perform navigation given a goal in the virtual world. the  move_base node contains the global & local planner to complete the navigation task.
+
+4. actionlib --> actionlib package is an alternative to ROS services. In this project, it is used to handle requests among the move_base client and server.
+
+5. visualization_msgs --> it is generally used with RVIZ for visualization aspects. In this project, it is used for handling the construction & destruction of markers in RVIZ.
+
+6. gmapping --> this package provides the interface and utilities to map the virtual environment. It can also be called using "rosrun gmapping slam_gmapping"
+     
+
+Working-Explaination:
+
+With the help of Building editor in Gazebo, a custom environment is used for moving the robot within the Home Service Project.
+This environment is mapped using Gmapping ROS package which converts the 3D world into 2D occupancy grid map. The SLAM technique/algorithm used with gmapping package is Hector SLAM.
+Once the 2D occupancy grid map is constructed through robot movement controlled via teleoperation package (turtlebot_teleop), the map_server is used to save the generated map (using
+rosrun map_server map_server -f maps/map). Correspondingly a .pgm & .yaml files are generated for the occupancy grid map.
+Next the robot is navigated to a certain goal position using ROS navigation stack. Movebase package is used for the planning of the robot from one position to another by creating both global 
+planners. The default implementation of trajectory planning is based on Dijkstra's algorithm. AMCL is used for localization of the robot pose throughout the planning & navigation task. 
+There are 2 different goals defined in the project. The first goal is the "Pickup Zone" and the second goal is the "Dropoff zone". The final part of the project sees the creation of
+virtual markers within Rviz using "visualization_msgs" package. The "add_markers" node is responsible for creating & destroying the virtual markers at the pickup & dropoff zones and the
+"pickup_objects" node makes the robot move between the different goal positions.
